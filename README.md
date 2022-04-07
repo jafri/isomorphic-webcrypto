@@ -7,8 +7,6 @@ There's [a great Node polyfill](https://github.com/PeculiarVentures/webcrypto) f
 
 IE11 and versions of Safari < 11 use an older version of the spec, so the browser implementation includes a [webcrypto-shim](https://github.com/vibornoff/webcrypto-shim) to iron out the differences. You'll still need to provide your own Promise polyfill.
 
-There's currently no native crypto support in React Native, so [the Microsoft Research library](https://github.com/kevlened/msrCrypto) is exposed.
-
 > **Note:** If you're performing cross-platform jwt operations, consider [jwt-lite](https://www.npmjs.com/package/jwt-lite) or [jwt-verifier-lite](https://www.npmjs.com/package/jwt-verifier-lite) (for OpenID Connect), which build on `isomorphic-webcrypto`
 
 ## Install
@@ -36,28 +34,6 @@ crypto.subtle.digest(
   const hashString = hex.fromBuffer(hash);
 })
 ```
-
-### React Native
-
-React Native support is implemented using [the Microsoft Research library](https://github.com/kevlened/msrCrypto). The React Native environment only supports `Math.random()`, so [react-native-securerandom](https://github.com/rh389/react-native-securerandom) is used to provide proper entropy. This is handled automatically, except for `crypto.getRandomValues()`, which requires you wait:
-
-```javascript
-const crypto = require('isomorphic-webcrypto')
-
-(async () => {
-  // Only needed for crypto.getRandomValues
-  // but only wait once, future calls are secure
-  await crypto.ensureSecure();
-  const array = new Uint8Array(1);
-  crypto.getRandomValues(array);
-  const safeValue = array[0];
-})()
-```
-
-Working React Native examples:
-
-* Using [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/tree/master/crna) with Expo
-* Using an ejected [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/blob/master/crna-ejected)
 
 ## I just want to drop in a script tag
 
